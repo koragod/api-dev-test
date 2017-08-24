@@ -11,13 +11,13 @@ import com.sun.jersey.api.client.config.*;
 
 public class ComparePriceClient {
 
-	private WebResource webResource;
+	private WebResource webResourceWalmart;
+	private WebResource webResourceBestBuy;
 	private Client client;
-	private String walmartAPIComplete = "http://api.walmartlabs.com/v1/search?apiKey=rm25tyum3p9jm9x9x7zxshfa&query=iPod";
-	private String walmartAPI = "http://api.walmartlabs.com/v1/search?apiKey=rm25tyum3p9jm9x9x7zxshfa&query=iPod&sort=price&order=asc";
+	private String walmartAPI = "http://api.walmartlabs.com/v1/search";
 	
 	
-	private String bestBuyAPI = "https://api.bestbuy.com/v1/?format=json?apiKey=pfe9fpy68yg28hvvma49sc89";
+	private String bestBuyAPI = "https://api.bestbuy.com/v1/products((search=iPad))?format=json";
 	
 	private static final String REST_URI 
      = "https://api.bestbuy.com/v1/?format=json/?apiKey=pfe9fpy68yg28hvvma49sc89";
@@ -26,19 +26,26 @@ public class ComparePriceClient {
  
 	public ComparePriceClient() {
 		client = Client.create(new DefaultClientConfig());
-		
-		webResource = client.resource(walmartAPI).path("");
+		webResourceWalmart = client.resource(walmartAPI).path("");
+		webResourceBestBuy = client.resource(bestBuyAPI).path("");
 		
 	}
 	
+	
 	public String ComparePrice(String prod) {
-		WebResource resource = webResource;
-		resource = 
-				resource.path(MessageFormat.format("", new Object[] {prod}));
+		WebResource resourceWalmart = webResourceWalmart;
+		resourceWalmart = resourceWalmart.queryParam("apiKey","rm25tyum3p9jm9x9x7zxshfa").queryParam("query",prod).queryParam("order","asc");
+		String resultWalmart = resourceWalmart.accept(MediaType.TEXT_PLAIN).get(String.class);
 		
-		String result = resource.accept(MediaType.TEXT_PLAIN).get(String.class);
 		
-		return result;
+		
+		WebResource resourceBestBuy = webResourceBestBuy;
+		resourceBestBuy = resourceBestBuy.queryParam("apiKey","pfe9fpy68yg28hvvma49sc89");
+		String resultBestBuy = resourceBestBuy.accept(MediaType.TEXT_PLAIN).get(String.class);
+		
+		
+		
+		return resultBestBuy;
 		
 	}
 

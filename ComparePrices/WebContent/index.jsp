@@ -7,6 +7,6 @@
 <title>Insert title here</title>
 </head>
 <body>
- <a href = "ComparePrice">Click to get Lowest Price</a><a/>
+  <a href="ComparePrice">Click to get the Lowest Price</a>
 </body>
 </html>
